@@ -1,0 +1,48 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
+    id "org.jetbrains.kotlin.plugin.compose" version "2.2.10"
+    id("org.jetbrains.compose") version "1.7.3"
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    google()  // need for: androidx.annotation:annotation
+}
+
+def os = org.gradle.internal.os.OperatingSystem.current()
+def desktopModule =
+                os.isWindows() ? "desktop-jvm-windows-x64" :
+                os.isMacOsX()  ? "desktop-jvm-macos" :
+                                 "desktop-jvm-linux-x64"
+
+dependencies {
+    implementation "org.jetbrains.compose.desktop:${desktopModule}:1.7.3"
+    implementation "org.jetbrains.compose.material3:material3-desktop:1.7.3"
+    implementation "org.jetbrains.compose.foundation:foundation-desktop:1.7.3"
+    implementation "org.jetbrains.compose.runtime:runtime-desktop:1.7.3"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
+    implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:2.2.20"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+}
+
+compose.desktop {
+    application {
+        mainClass = "org.example.MainKt"
+        nativeDistributions {
+            packageName = "KotlinRunnerX"
+            packageVersion = "1.0.0"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(20)
+}
